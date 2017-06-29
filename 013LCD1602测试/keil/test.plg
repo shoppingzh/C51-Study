@@ -1,0 +1,222 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\c51workspace\013LCD1602≤‚ ‘\keil\test.uvproj
+Project File Date:  06/28/2017
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(86): warning C206: 'read_pointer': missing function-prototype
+MAIN.C(94): error C231: 'read_pointer': redefinition
+MAIN.C(104): error C202: 'BASIC_POSITION': undefined identifier
+MAIN.C(105): error C231: 'read_pointer': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(112): error C202: 'BASIC_POSITION': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_STRING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+Program Size: data=11.0 xdata=0 code=199
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+Program Size: data=37.1 xdata=0 code=1306
+creating hex file from "test"...
+"test" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(31): warning C206: 'delay': missing function-prototype
+MAIN.C(31): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(38): error C231: 'delay': redefinition
+MAIN.C(43): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(32): warning C206: 'delay': missing function-prototype
+MAIN.C(32): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(39): error C231: 'delay': redefinition
+MAIN.C(44): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(32): warning C206: 'delay': missing function-prototype
+MAIN.C(32): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(39): error C231: 'delay': redefinition
+MAIN.C(44): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(33): warning C206: 'delay': missing function-prototype
+MAIN.C(33): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(40): error C231: 'delay': redefinition
+MAIN.C(45): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(34): warning C206: 'delay': missing function-prototype
+MAIN.C(34): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(41): error C231: 'delay': redefinition
+MAIN.C(46): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(26): warning C280: 'i': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+Program Size: data=13.0 xdata=0 code=217
+creating hex file from "test"...
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(26): warning C280: 'i': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+Program Size: data=13.0 xdata=0 code=217
+creating hex file from "test"...
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(26): warning C280: 'i': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+Program Size: data=13.0 xdata=0 code=222
+creating hex file from "test"...
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(31): warning C206: 'delay': missing function-prototype
+MAIN.C(31): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(39): error C231: 'delay': redefinition
+MAIN.C(44): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(28): warning C206: 'display_init': missing function-prototype
+MAIN.C(33): warning C206: 'delay': missing function-prototype
+MAIN.C(33): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(41): error C231: 'delay': redefinition
+MAIN.C(46): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(34): warning C206: 'delay': missing function-prototype
+MAIN.C(34): error C267: 'delay': requires ANSI-style prototype
+MAIN.C(42): error C231: 'delay': redefinition
+MAIN.C(47): error C231: 'delay': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(29): warning C280: 'i': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 008AH
+Program Size: data=13.0 xdata=0 code=230
+creating hex file from "test"...
+"test" - 0 Error(s), 5 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(29): warning C280: 'i': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 008AH
+Program Size: data=13.0 xdata=0 code=230
+creating hex file from "test"...
+"test" - 0 Error(s), 5 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 008AH
+Program Size: data=11.0 xdata=0 code=230
+creating hex file from "test"...
+"test" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_STRING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 009DH
+Program Size: data=11.0 xdata=0 code=213
+creating hex file from "test"...
+"test" - 0 Error(s), 5 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATA_POS?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_STRING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_READ_DATA_POS?MAIN
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DISPLAY_INIT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 008AH
+Program Size: data=11.0 xdata=0 code=218
+creating hex file from "test"...
+"test" - 0 Error(s), 5 Warning(s).

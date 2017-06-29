@@ -1,0 +1,98 @@
+C51 COMPILER V9.01   MAIN                                                                  04/06/2017 15:30:12 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #define uchar unsigned char
+   3          #define uint unsigned int
+   4          
+   5          void delay(uint time);
+   6          void write_com(uchar com);
+   7          void write_data(uchar datas);
+   8          
+   9          void init();
+  10          
+  11          sbit en = P3^4;
+  12          sbit rs = P3^5;
+  13          
+  14          uchar table[] = "2017-04-06 SET",*p = table;
+  15          
+  16          void main(){
+  17   1      
+  18   1              uchar i = 0;
+  19   1              
+  20   1              init(); 
+  21   1      
+  22   1              while(*p){
+  23   2                      i++;
+  24   2                      if(i>15){
+  25   3                              write_com(0x80+0x40);
+  26   3                              i=0;
+  27   3                      }
+  28   2                      write_data(*p);
+  29   2                      p++;
+  30   2              }
+  31   1      
+  32   1              while(1);
+  33   1      }
+  34          
+  35          /*初始化*/
+  36          void init(){
+  37   1      
+  38   1              en = 0;
+  39   1              write_com(0x38);
+  40   1              write_com(0x0c);
+  41   1              write_com(0x06);
+  42   1              write_com(0x01);
+  43   1              write_com(0x80);
+  44   1      
+  45   1      }
+  46          
+  47          /*延时*/
+  48          void delay(uint time){
+  49   1              uint x,y;
+  50   1              for(x=0;x<time;x++){
+  51   2                      for(y=0;y<100;y++);
+  52   2              }
+  53   1      }
+  54          
+  55          /*写指令*/
+C51 COMPILER V9.01   MAIN                                                                  04/06/2017 15:30:12 PAGE 2   
+
+  56          void write_com(uchar com){
+  57   1              rs = 0;
+  58   1              P0 = com;
+  59   1              delay(5);
+  60   1              en = 1;
+  61   1              delay(5);
+  62   1              en = 0;
+  63   1      }
+  64          
+  65          /*写数据*/        
+  66          void write_data(uchar datas){
+  67   1              rs = 1;
+  68   1              P0 = datas;
+  69   1              delay(5);
+  70   1              en = 1;
+  71   1              delay(5);
+  72   1              en = 0;
+  73   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    148    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     18       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

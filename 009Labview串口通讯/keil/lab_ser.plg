@@ -1,0 +1,48 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+F:\c51workspace\009Labview´®¿ÚÍ¨Ñ¶\keil\lab_ser.uvproj
+Project File Date:  06/16/2017
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=9.0 xdata=0 code=16
+"lab_ser" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=9.0 xdata=0 code=16
+creating hex file from "lab_ser"...
+"lab_ser" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(8): error C132: 'main': not in formal parameter list
+MAIN.C(8): error C141: syntax error near '{'
+MAIN.C(10): error C136: 'i': 'void' on variable
+MAIN.C(10): error C244: 'i': can't initialize, bad type or class
+MAIN.C(10): error C136: 'i': 'void' on variable
+MAIN.C(10): error C132: 'i': not in formal parameter list
+MAIN.C(11): error C132: 'serial_init': not in formal parameter list
+MAIN.C(12): error C141: syntax error near 'while'
+MAIN.C(12): error C141: syntax error near '1'
+MAIN.C(13): error C141: syntax error near '++', expected ')'
+MAIN.C(14): error C141: syntax error near '}'
+MAIN.C(19): error C231: '_ser_write_data': redefinition
+MAIN.C(24): error C231: '_ser_write_data': redefinition
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=11.0 xdata=0 code=94
+creating hex file from "lab_ser"...
+"lab_ser" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=11.0 xdata=0 code=94
+creating hex file from "lab_ser"...
+"lab_ser" - 0 Error(s), 0 Warning(s).

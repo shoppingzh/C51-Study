@@ -1,0 +1,270 @@
+C51 COMPILER V9.01   MAIN                                                                  06/22/2017 13:55:38 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #define uchar unsigned char
+   3          #define uint unsigned int
+   4          
+   5          //1602数据端口
+   6          #define DISPLAY_OUT P2
+   7          //1602初始地址
+   8          #define BASIC_POSITION 0x80
+   9          //温度值高中低位的显示位置
+  10          #define HIGH_POSITION BASIC_POSITION+9
+  11          #define MID_POSITION BASIC_POSITION+10
+  12          #define LOW_POSITION BASIC_POSITION+11
+  13          //ADC0808数字量输出端口
+  14          #define DEGITAL_OUT P1
+  15          
+  16          void display_init();
+  17          void adc_clock_init();
+  18          void serial_init();
+  19          
+  20          void delay(uint time);
+  21          void ad_transform();
+  22          void serial_write(uchar dat);
+  23          uint get_truth(uint x);
+  24          
+  25          void write_com(uchar com);
+  26          void write_data(uchar datas);
+  27          void write_data_pos(uint pos,uchar datas);
+  28          void write_string(uchar *str);
+  29          uchar read_data();
+  30          uchar read_data_pos(uint pos);
+  31          uint read_pointer();
+  32          
+  33          //1602
+  34          sbit en = P3^5;
+  35          sbit rs = P3^6;
+  36          sbit rw = P3^7;
+  37          
+  38          //ADC0808
+  39          sbit clk = P3^4;
+  40          sbit eoc = P3^2;
+  41          sbit st = P0^6;
+  42          sbit oe = P0^7;
+  43          
+  44          //温度值的高中低三位                             
+  45          int tem,low,mid,high;
+  46          
+  47          void main(){
+  48   1      
+  49   1              display_init();
+  50   1              adc_clock_init();
+  51   1              serial_init();
+  52   1      
+  53   1              write_string("    Tem: ");
+  54   1      
+  55   1              while(1){
+C51 COMPILER V9.01   MAIN                                                                  06/22/2017 13:55:38 PAGE 2   
+
+  56   2                      ad_transform();
+  57   2                      oe = 1;
+  58   2                      tem = DEGITAL_OUT;
+  59   2                      tem = tem%100;
+  60   2                      low = tem % 10;
+  61   2                      mid = tem/10 % 10;
+  62   2                      high = tem / 100;
+  63   2      
+  64   2                      //将数据显示在1602片中
+  65   2                      write_data_pos(HIGH_POSITION,high+48);
+  66   2                      write_data_pos(MID_POSITION,mid+48);
+  67   2                      write_data_pos(LOW_POSITION,low+48);
+  68   2      
+  69   2                      //将数据发送到串口，供Labview显示
+  70   2                      serial_write(get_truth(high));
+  71   2                      serial_write(get_truth(mid));
+  72   2                      serial_write(get_truth(low));
+  73   2                      delay(50);
+  74   2      
+  75   2                      oe = 0;                 
+  76   2              }
+  77   1              
+  78   1              
+  79   1      }
+  80          
+  81          /*真实发送给串口的数据（如发送数字1其实需要发送字符'1'，其ASCII码为49）*/
+  82          uint get_truth(uint x){
+  83   1              if(x>= 0 && x <= 9){
+  84   2                      return x+48;
+  85   2              }
+  86   1              return x;
+  87   1      }
+  88          
+  89          /*1602片初始化*/
+  90          void display_init(){
+  91   1              en = 0;
+  92   1              //默认为写操作
+  93   1              rw = 0;
+  94   1              //基础设置
+  95   1              write_com(0x38);
+  96   1              //显示打开，不显示光标
+  97   1              write_com(0x0c);
+  98   1              //write_com(0x0f);
+  99   1              //读写一个字符指针和光标同时加1
+ 100   1              write_com(0x06);
+ 101   1              //清屏
+ 102   1              write_com(0x01);
+ 103   1              //从第一个位开始写
+ 104   1              write_com(0x80);
+ 105   1      }
+ 106          
+ 107          /*AD转换需要时钟，在该函数中开启一个定时器用于产生时钟信号*/
+ 108          void adc_clock_init(){
+ 109   1              TMOD =  0x22;
+ 110   1              TH0 = 0xc0;
+ 111   1              TL0 = 0xc0;
+ 112   1              EA = 1;
+ 113   1              ET0 = 1;
+ 114   1              TR0 = 1;
+ 115   1      }
+ 116          
+ 117          /*adc时钟信号定时器中断*/
+C51 COMPILER V9.01   MAIN                                                                  06/22/2017 13:55:38 PAGE 3   
+
+ 118          void adc_clock_int() interrupt 1{
+ 119   1              clk = !clk;
+ 120   1      }
+ 121          
+ 122          
+ 123          /*串口初始化*/
+ 124          void serial_init(){
+ 125   1              TMOD = 0x22;
+ 126   1              TH1 = 0xfd;
+ 127   1              TL1 = 0xfd;
+ 128   1              SCON = 0x40;
+ 129   1              PCON = 0x00;
+ 130   1              TR1 = 1;
+ 131   1      }
+ 132          
+ 133          /*AD转换*/
+ 134          void ad_transform(){
+ 135   1              st = 0;
+ 136   1              st = 1;
+ 137   1              st = 0;
+ 138   1              while(!eoc);
+ 139   1      }
+ 140          
+ 141          /*串口发送数据*/
+ 142          void serial_write(uchar dat){
+ 143   1              SBUF = dat;
+ 144   1              while(!TI);              
+ 145   1              TI = 0;
+ 146   1              delay(1);       
+ 147   1      }
+ 148          
+ 149          
+ 150          /*--------------------------------------------------常用操作----------------------------------------------
+             -----*/
+ 151          
+ 152          /*延时*/
+ 153          void delay(uint time){
+ 154   1              uint x,y;
+ 155   1              for(x=0;x<time;x++){
+ 156   2                      for(y=0;y<100;y++);
+ 157   2              }
+ 158   1      }
+ 159          
+ 160          
+ 161          /*--------------------------------------------------1602--------------------------------------------------
+             -*/
+ 162          
+ 163          /*写指令*/
+ 164          void write_com(uchar com){
+ 165   1              rw = 0;
+ 166   1              rs = 0;
+ 167   1              DISPLAY_OUT = com;
+ 168   1              delay(1);
+ 169   1              en = 1;
+ 170   1              delay(1);
+ 171   1              en = 0;
+ 172   1      }
+ 173          
+ 174          /*写数据*/        
+ 175          void write_data(uchar datas){
+ 176   1              rw = 0;
+ 177   1              rs = 1;
+C51 COMPILER V9.01   MAIN                                                                  06/22/2017 13:55:38 PAGE 4   
+
+ 178   1              DISPLAY_OUT = datas;
+ 179   1              delay(1);
+ 180   1              en = 1;
+ 181   1              delay(1);
+ 182   1              en = 0;
+ 183   1      }
+ 184          
+ 185          /*在指定位置写数据*/
+ 186          void write_data_pos(uint pos,uchar datas){
+ 187   1              write_com(pos);
+ 188   1              write_data(datas);
+ 189   1      }
+ 190          
+ 191          /*写入字符串数据*/
+ 192          void write_string(char *str){
+ 193   1              while(*str){
+ 194   2                      write_data(*str);
+ 195   2                      str++;
+ 196   2              }
+ 197   1      }
+ 198          
+ 199          /*读取数据（默认读取当前光标处的数据）*/
+ 200          uchar read_data(){
+ 201   1              uchar c = 0;
+ 202   1              DISPLAY_OUT = 0xff;  //为什么?
+ 203   1              rw = 1;
+ 204   1              rs = 1;
+ 205   1              delay(1);
+ 206   1              en = 1;
+ 207   1              //delay(1);
+ 208   1              c = DISPLAY_OUT;
+ 209   1              en = 0;
+ 210   1              //读取数据后，将光标拉回
+ 211   1              write_com(0x10);
+ 212   1              return c;
+ 213   1      }
+ 214          
+ 215          /*读取指定位置的数据*/
+ 216          uchar read_data_pos(uint pos){
+ 217   1              uchar c;
+ 218   1              uint pointer = read_pointer();
+ 219   1              write_com(pos);
+ 220   1              c = read_data();
+ 221   1              write_com(pointer);
+ 222   1              return c;
+ 223   1      }
+ 224          
+ 225          /*读取当前指针的位置*/
+ 226          uint read_pointer(){
+ 227   1              uint read_pointer = 0;
+ 228   1              DISPLAY_OUT = 0xff; 
+ 229   1              rw = 1;
+ 230   1              rs = 0;
+ 231   1              delay(5);
+ 232   1              en = 1;
+ 233   1              delay(5);
+ 234   1              read_pointer = DISPLAY_OUT;
+ 235   1              en = 0;
+ 236   1              return read_pointer+BASIC_POSITION;     
+ 237   1      }
+
+
+C51 COMPILER V9.01   MAIN                                                                  06/22/2017 13:55:38 PAGE 5   
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    471    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

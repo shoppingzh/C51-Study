@@ -1,0 +1,31 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+F:\c51workspace\004定时器流水灯\timer_flush.uvproj
+Project File Date:  05/17/2017
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=9.0 xdata=0 code=32
+"timer_flush" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+MAIN.C(24): error C202: 'a': undefined identifier
+MAIN.C(25): error C202: 'a': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=10.0 xdata=0 code=82
+creating hex file from "timer_flush"...
+"timer_flush" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: data=11.0 xdata=0 code=97
+creating hex file from "timer_flush"...
+"timer_flush" - 0 Error(s), 0 Warning(s).

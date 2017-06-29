@@ -1,0 +1,175 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        04/06/2017  15:30:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+D:\KEIL\C51\BIN\BL51.EXE main.obj TO displaydemo
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  displaydemo (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0012H     UNIT         ?DT?MAIN
+            DATA    001AH     0001H     UNIT         _DATA_GROUP_
+            IDATA   001BH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     003EH     UNIT         ?PR?MAIN?MAIN
+            CODE    08CAH     002BH     UNIT         ?PR?_DELAY?MAIN
+            CODE    08F5H     001BH     UNIT         ?PR?INIT?MAIN
+            CODE    0910H     0019H     UNIT         ?C?LIB_CODE
+            CODE    0929H     0017H     UNIT         ?C_INITSEG
+            CODE    0940H     0008H     UNIT         ?PR?_WRITE_COM?MAIN
+            CODE    0948H     0008H     UNIT         ?PR?_WRITE_DATA?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   displaydemo (MAIN)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                  001AH    0001H
+  +--> ?PR?INIT?MAIN
+  +--> ?PR?_WRITE_COM?MAIN
+  +--> ?PR?_WRITE_DATA?MAIN
+
+?PR?INIT?MAIN                  -----    -----
+  +--> ?PR?_WRITE_COM?MAIN
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/06/2017  15:30:12  PAGE 2
+
+
+?PR?_WRITE_COM?MAIN            -----    -----
+  +--> ?PR?_DELAY?MAIN
+
+?PR?_WRITE_DATA?MAIN           -----    -----
+  +--> ?PR?_DELAY?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  displaydemo (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:0008H         PUBLIC        table
+  D:00A8H         PUBLIC        IE
+  C:08D5H         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  C:088CH         PUBLIC        main
+  C:0948H         PUBLIC        _write_data
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:08F5H         PUBLIC        init
+  C:0940H         PUBLIC        _write_com
+  B:00B0H.4       PUBLIC        en
+  B:00B0H.5       PUBLIC        rs
+  D:00C8H         PUBLIC        T2CON
+  D:0017H         PUBLIC        p
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:001AH         SYMBOL        i
+  -------         ENDDO         
+  C:088CH         LINE#         16
+  C:088CH         LINE#         18
+  C:088FH         LINE#         20
+  C:0892H         LINE#         22
+  C:089DH         LINE#         23
+  C:089FH         LINE#         24
+  C:08A6H         LINE#         25
+  C:08ABH         LINE#         26
+  C:08AEH         LINE#         27
+  C:08AEH         LINE#         28
+  C:08BBH         LINE#         29
+  C:08C6H         LINE#         30
+  C:08C8H         LINE#         32
+  -------         ENDPROC       MAIN
+  -------         PROC          INIT
+  C:08F5H         LINE#         36
+  C:08F5H         LINE#         38
+  C:08F7H         LINE#         39
+  C:08FCH         LINE#         40
+  C:0901H         LINE#         41
+BL51 BANKED LINKER/LOCATER V6.22                                                      04/06/2017  15:30:12  PAGE 3
+
+
+  C:0906H         LINE#         42
+  C:090BH         LINE#         43
+  -------         ENDPROC       INIT
+  -------         PROC          L?0019
+  -------         ENDPROC       L?0019
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        time
+  -------         DO            
+  D:0004H         SYMBOL        x
+  D:0002H         SYMBOL        y
+  -------         ENDDO         
+  C:08D5H         LINE#         48
+  C:08D5H         LINE#         50
+  C:08DFH         LINE#         51
+  C:08EDH         LINE#         52
+  C:08F4H         LINE#         53
+  -------         ENDPROC       _DELAY
+  -------         PROC          _WRITE_COM
+  D:0007H         SYMBOL        com
+  C:0940H         LINE#         56
+  C:0940H         LINE#         57
+  C:0942H         LINE#         58
+  C:0942H         LINE#         59
+  C:0942H         LINE#         60
+  C:0942H         LINE#         61
+  C:0945H         LINE#         62
+  C:0947H         LINE#         63
+  -------         ENDPROC       _WRITE_COM
+  -------         PROC          _WRITE_DATA
+  D:0007H         SYMBOL        datas
+  C:0948H         LINE#         66
+  C:0948H         LINE#         67
+  C:094AH         LINE#         68
+  C:094AH         LINE#         69
+  C:094AH         LINE#         70
+  C:094AH         LINE#         71
+  C:094DH         LINE#         72
+  C:094FH         LINE#         73
+  -------         ENDPROC       _WRITE_DATA
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C?CLDPTR
+  C:0910H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00AAH BYTE ( 8%) *
+******************************************************************************
+
+Program Size: data=28.0 xdata=0 code=339
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

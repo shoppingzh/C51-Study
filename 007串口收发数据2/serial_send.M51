@@ -1,0 +1,130 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        05/17/2017  10:08:11  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+D:\KEIL\C51\BIN\BL51.EXE main.obj TO serial_send
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  main.obj (MAIN)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  serial_send (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?MAIN
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0038H     UNIT         ?PR?TIMER0_INT?MAIN
+            CODE    0046H     0021H     UNIT         ?PR?MAIN?MAIN
+            CODE    0067H     0016H     UNIT         ?PR?NEXT_DIGIT?MAIN
+            CODE    007DH     000CH     UNIT         ?C_C51STARTUP
+            CODE    0089H     000AH     UNIT         ?CO?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   serial_send (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIMER0_INT?MAIN
+  +--> ?PR?NEXT_DIGIT?MAIN
+
+?PR?NEXT_DIGIT?MAIN
+  +--> ?CO?MAIN
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  serial_send (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/17/2017  10:08:11  PAGE 2
+
+
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0089H         PUBLIC        digit_table
+  C:000EH         PUBLIC        timer0_int
+  B:00A8H.7       PUBLIC        EA
+  B:0098H.1       PUBLIC        TI
+  C:0046H         PUBLIC        main
+  D:0008H         PUBLIC        count
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  C:0067H         PUBLIC        next_digit
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  D:0009H         PUBLIC        pos
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  -------         PROC          MAIN
+  C:0046H         LINE#         10
+  C:0046H         LINE#         11
+  C:0049H         LINE#         13
+  C:004CH         LINE#         14
+  C:004FH         LINE#         15
+  C:0052H         LINE#         16
+  C:0055H         LINE#         17
+  C:0057H         LINE#         18
+  C:0059H         LINE#         20
+  C:005BH         LINE#         21
+  C:005DH         LINE#         22
+  C:0060H         LINE#         23
+  C:0063H         LINE#         24
+  C:0065H         LINE#         26
+  -------         ENDPROC       MAIN
+  -------         PROC          NEXT_DIGIT
+  C:0067H         LINE#         31
+  C:0067H         LINE#         32
+  C:006EH         LINE#         33
+  C:0071H         LINE#         34
+  C:0071H         LINE#         35
+  C:007CH         LINE#         36
+  -------         ENDPROC       NEXT_DIGIT
+  -------         PROC          TIMER0_INT
+  C:000EH         LINE#         38
+  C:001DH         LINE#         39
+  C:0020H         LINE#         40
+  C:0023H         LINE#         41
+  C:0025H         LINE#         42
+  C:002CH         LINE#         43
+  C:002FH         LINE#         44
+  C:0034H         LINE#         45
+  C:0037H         LINE#         46
+  C:0039H         LINE#         47
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/17/2017  10:08:11  PAGE 3
+
+
+  C:0039H         LINE#         48
+  -------         ENDPROC       TIMER0_INT
+  -------         ENDMOD        MAIN
+
+Program Size: data=11.0 xdata=0 code=139
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

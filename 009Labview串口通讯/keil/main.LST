@@ -1,0 +1,64 @@
+C51 COMPILER V9.01   MAIN                                                                  06/16/2017 17:10:27 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          void delay();
+   4          void serial_init();
+   5          
+   6          void ser_write_data(int dat);
+   7          
+   8          void main(){
+   9   1              
+  10   1              int i = 0;
+  11   1              serial_init();
+  12   1              while(1){
+  13   2                      ser_write_data(i++);
+  14   2              }
+  15   1      
+  16   1      }
+  17          
+  18          /**往串口写入一个数据*/
+  19          void ser_write_data(int dat){
+  20   1              SBUF = dat;
+  21   1              while(!TI);
+  22   1              TI = 0;
+  23   1              delay();
+  24   1      }
+  25          
+  26          /**串口初始化*/
+  27          void serial_init(){
+  28   1              TMOD = 0x20;
+  29   1              SCON = 0x40;
+  30   1              TH1 = 0xfd;
+  31   1              TL1 = 0xfd;
+  32   1              TR1 = 1;
+  33   1      }
+  34          
+  35          /**延时*/
+  36          void delay(){
+  37   1              int x,y;
+  38   1              for(x=0;x<400;x++){
+  39   2                      for(y=0;y<10;y++);
+  40   2              }
+  41   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     79    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,426 @@
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          #define uchar unsigned char 
+   4          #define uint unsigned int
+   5          
+   6          #define HOUR_PORT P1
+   7          #define MINUTE_PORT P2
+   8          #define SECOND_PORT P3
+   9          
+  10          void delay(uchar time);
+  11          void delay500ms();
+  12          uint get_time_code(uint time);
+  13          uchar key_scan();
+  14          
+  15          void init_time(uint h,uint m,uint s);
+  16          void display_time(uint h,uint m,uint s);
+  17          void timer_init();
+  18          void refresh_time();
+  19          void warning();
+  20          void toggle_status();
+  21          
+  22          //时分秒
+  23          uint hour,minute,second;
+  24          
+  25          uint count = 0;
+  26          
+  27          //设置状态
+  28          bit setting = 0;
+  29          
+  30          //时分秒的每一个二进制位
+  31          sbit h1 = P1^0;
+  32          sbit h2 = P1^1;
+  33          sbit h3 = P1^2;
+  34          sbit h4 = P1^3;
+  35          sbit h5 = P1^4;
+  36          sbit m1 = P2^0;
+  37          sbit m2 = P2^1;
+  38          sbit m3 = P2^2;
+  39          sbit m4 = P2^3;
+  40          sbit m5 = P2^4;
+  41          sbit m6 = P2^5;
+  42          sbit s1 = P3^0;
+  43          sbit s2 = P3^1;
+  44          sbit s3 = P3^2;
+  45          sbit s4 = P3^3;
+  46          sbit s5 = P3^4;
+  47          sbit s6 = P3^5;
+  48          
+  49          //当前正在设置状态的位
+  50          uchar curr_set = 0;
+  51          
+  52          sbit set_led = P0^0;
+  53          
+  54          void main(){
+  55   1      
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 2   
+
+  56   1              uchar key;
+  57   1              init_time(14,01,07);
+  58   1              timer_init();
+  59   1              TR0 = 1;
+  60   1              
+  61   1              while(1){
+  62   2                      key = key_scan();
+  63   2                      switch(key){
+  64   3                              case 0xe0:
+  65   3                                      if(!setting){
+  66   4                                              setting = 1;
+  67   4                                              set_led = 0x00;
+  68   4                                              TR0 = 0;
+  69   4                                              warning();
+  70   4                                      }else{
+  71   4                                              setting = 0;
+  72   4                                              set_led = 0xff;
+  73   4                                              curr_set = 0;
+  74   4                                              //时间保存
+  75   4                                              hour = 0xff - HOUR_PORT;
+  76   4                                              minute = 0xff - MINUTE_PORT;
+  77   4                                              second = 0xff - SECOND_PORT;
+  78   4      
+  79   4                                              TR0 = 1;                
+  80   4                                      }
+  81   3                                      break;
+  82   3                              case 0xb0:
+  83   3                                      if(setting){
+  84   4                                              if(curr_set >= 16){
+  85   5                                                      curr_set = 0;
+  86   5                                              }else{
+  87   5                                                      curr_set++;
+  88   5                                              }
+  89   4                                              warning();      
+  90   4                                      }
+  91   3                                      break;
+  92   3                              case 0x70:
+  93   3                                      if(setting){
+  94   4                                              if(curr_set <= 0){
+  95   5                                                      curr_set = 16;
+  96   5                                              }else{
+  97   5                                                      curr_set--;
+  98   5                                              }
+  99   4                                              warning();
+ 100   4                                      }
+ 101   3                                      break;
+ 102   3                              case 0xd0:
+ 103   3                                      if(setting){
+ 104   4                                              toggle_status();
+ 105   4                                      }
+ 106   3                                      break;
+ 107   3                      }                               
+ 108   2              }
+ 109   1      
+ 110   1      }
+ 111          
+ 112          /*定时器中断*/
+ 113          void timer0_int() interrupt 1{
+ 114   1              TH0 = 0x3c;
+ 115   1              TL0 = 0xb0;
+ 116   1              if(count++ != 18){
+ 117   2                      return;
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 3   
+
+ 118   2              }
+ 119   1      
+ 120   1              //刷新时间
+ 121   1              refresh_time();
+ 122   1              display_time(hour,minute,second);
+ 123   1              
+ 124   1              count = 0;
+ 125   1      }
+ 126          
+ 127          /*初始化时间*/
+ 128          void init_time(uint h,uint m,uint s){
+ 129   1              display_time(h,m,s);
+ 130   1      }
+ 131          
+ 132          /*显示时间*/
+ 133          void display_time(uint h,uint m,uint s){
+ 134   1              hour = h;
+ 135   1              minute = m;
+ 136   1              second = s;
+ 137   1              HOUR_PORT  = get_time_code(h);
+ 138   1              MINUTE_PORT  = get_time_code(m);
+ 139   1              SECOND_PORT  = get_time_code(s);
+ 140   1      }
+ 141          
+ 142          /*定时器初始化*/
+ 143          void timer_init(){
+ 144   1              TMOD = 0x01;
+ 145   1              TH0 = 0x3c;
+ 146   1              TL0 = 0xb0;
+ 147   1              EA = 1;
+ 148   1              ET0 = 1;
+ 149   1      }
+ 150          
+ 151          /*刷新时间*/
+ 152          void refresh_time(){
+ 153   1              if(second != 59){
+ 154   2                      second++;
+ 155   2                      return;
+ 156   2              }
+ 157   1      
+ 158   1              second = 0;
+ 159   1              if(minute != 59){
+ 160   2                      minute++;
+ 161   2                      return;
+ 162   2              }
+ 163   1      
+ 164   1              minute = 0;
+ 165   1              if(hour != 23){
+ 166   2                      hour++;
+ 167   2                      return;
+ 168   2              }
+ 169   1      
+ 170   1              hour = 0;
+ 171   1      
+ 172   1      }
+ 173          
+ 174          /*警示当前位置*/
+ 175          void warning(){
+ 176   1              uint i;
+ 177   1              switch(curr_set){
+ 178   2                      case 0:
+ 179   2                              for(i=0;i<4;i++){
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 4   
+
+ 180   3                                      s1 = !s1;
+ 181   3                                      delay500ms();
+ 182   3                              }
+ 183   2                              break;
+ 184   2                      case 1:
+ 185   2                              for(i=0;i<4;i++){
+ 186   3                                      s2 = !s2;
+ 187   3                                      delay500ms();
+ 188   3                              }
+ 189   2                              break;
+ 190   2                      case 2:
+ 191   2                              for(i=0;i<4;i++){
+ 192   3                                      s3 = !s3;
+ 193   3                                      delay500ms();
+ 194   3                              }
+ 195   2                              break;
+ 196   2                      case 3:
+ 197   2                              for(i=0;i<4;i++){
+ 198   3                                      s4 = !s4;
+ 199   3                                      delay500ms();
+ 200   3                              }
+ 201   2                              break;
+ 202   2                      case 4:
+ 203   2                              for(i=0;i<4;i++){
+ 204   3                                      s5 = !s5;
+ 205   3                                      delay500ms();
+ 206   3                              }
+ 207   2                              break;
+ 208   2                      case 5:
+ 209   2                              for(i=0;i<4;i++){
+ 210   3                                      s6 = !s6;
+ 211   3                                      delay500ms();
+ 212   3                              }
+ 213   2                              break;
+ 214   2      
+ 215   2                      case 6:
+ 216   2                              for(i=0;i<4;i++){
+ 217   3                                      m1 = !m1;
+ 218   3                                      delay500ms();
+ 219   3                              }
+ 220   2                              break;
+ 221   2                      case 7:
+ 222   2                              for(i=0;i<4;i++){
+ 223   3                                      m2 = !m2;
+ 224   3                                      delay500ms();
+ 225   3                              }
+ 226   2                              break;
+ 227   2                      case 8:
+ 228   2                              for(i=0;i<4;i++){
+ 229   3                                      m3 = !m3;
+ 230   3                                      delay500ms();
+ 231   3                              }
+ 232   2                              break;
+ 233   2                      case 9:
+ 234   2                              for(i=0;i<4;i++){
+ 235   3                                      m4 = !m4;
+ 236   3                                      delay500ms();
+ 237   3                              }
+ 238   2                              break;
+ 239   2                      case 10:
+ 240   2                              for(i=0;i<4;i++){
+ 241   3                                      m5 = !m5;
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 5   
+
+ 242   3                                      delay500ms();
+ 243   3                              }
+ 244   2                              break;
+ 245   2                      case 11:
+ 246   2                              for(i=0;i<4;i++){
+ 247   3                                      m6 = !m6;
+ 248   3                                      delay500ms();
+ 249   3                              }
+ 250   2                              break;
+ 251   2      
+ 252   2                      case 12:
+ 253   2                              for(i=0;i<4;i++){
+ 254   3                                      h1 = !h1;
+ 255   3                                      delay500ms();
+ 256   3                              }
+ 257   2                              break;
+ 258   2                      case 13:
+ 259   2                              for(i=0;i<4;i++){
+ 260   3                                      h2 = !h2;
+ 261   3                                      delay500ms();
+ 262   3                              }
+ 263   2                              break;
+ 264   2                      case 14:
+ 265   2                              for(i=0;i<4;i++){
+ 266   3                                      h3 = !h3;
+ 267   3                                      delay500ms();
+ 268   3                              }
+ 269   2                              break;
+ 270   2                      case 15:
+ 271   2                              for(i=0;i<4;i++){
+ 272   3                                      h4 = !h4;
+ 273   3                                      delay500ms();
+ 274   3                              }
+ 275   2                              break;
+ 276   2                      case 16:
+ 277   2                              for(i=0;i<4;i++){
+ 278   3                                      h5 = !h5;
+ 279   3                                      delay500ms();
+ 280   3                              }
+ 281   2                              break;
+ 282   2              }               
+ 283   1      }
+ 284          
+ 285          /*改变当前设置位的状态*/
+ 286          void toggle_status(){
+ 287   1              switch(curr_set){
+ 288   2                      case 0:
+ 289   2                              s1 = !s1;
+ 290   2                              break;
+ 291   2                      case 1:
+ 292   2                              s2 = !s2;
+ 293   2                              break;
+ 294   2                      case 2:
+ 295   2                              s3 = !s3;
+ 296   2                              break;
+ 297   2                      case 3:
+ 298   2                              s4 = !s4;
+ 299   2                              break;
+ 300   2                      case 4:
+ 301   2                              s5 = !s5;
+ 302   2                              break;
+ 303   2                      case 5:
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 6   
+
+ 304   2                              s6 = !s6;
+ 305   2                              break;
+ 306   2      
+ 307   2                      case 6:
+ 308   2                              m1 = !m1;
+ 309   2                              break;
+ 310   2                      case 7:
+ 311   2                              m2 = !m2;
+ 312   2                              break;
+ 313   2                      case 8:
+ 314   2                              m3 = !m3;
+ 315   2                              break;
+ 316   2                      case 9:
+ 317   2                              m4 = !m4;
+ 318   2                              break;
+ 319   2                      case 10:
+ 320   2                              m5 = !m5;
+ 321   2                              break;
+ 322   2                      case 11:
+ 323   2                              m6 = !m6;
+ 324   2                              break;
+ 325   2      
+ 326   2                      case 12:
+ 327   2                              h1 = !h1;
+ 328   2                              break;
+ 329   2                      case 13:
+ 330   2                              h2 = !h2;
+ 331   2                              break;
+ 332   2                      case 14:
+ 333   2                              h3 = !h3;
+ 334   2                              break;
+ 335   2                      case 15:
+ 336   2                              h4 = !h4;
+ 337   2                              break;
+ 338   2                      case 16:
+ 339   2                              h5 = !h5;
+ 340   2                              break;  
+ 341   2              }
+ 342   1      }
+ 343          
+ 344          /***************************************功能函数***************************************/
+ 345          
+ 346          /*延时*/
+ 347          void delay(uchar time){
+ 348   1              uchar x,y;
+ 349   1              for(x=0;x<time;x++){
+ 350   2                      for(y=0;y<100;y++);
+ 351   2              }       
+ 352   1      }
+ 353          
+ 354          /*延时500ms*/
+ 355          void delay500ms(){
+ 356   1              uchar i, j, k;
+ 357   1      
+ 358   1              _nop_();
+ 359   1              _nop_();
+ 360   1              i = 2;
+ 361   1              j = 5;
+ 362   1              k = 5;
+ 363   1              do
+ 364   1              {
+ 365   2                      do
+C51 COMPILER V9.01   MAIN                                                                  06/29/2017 15:11:09 PAGE 7   
+
+ 366   2                      {
+ 367   3                              while (--k);
+ 368   3                      } while (--j);
+ 369   2              } while (--i);
+ 370   1      }
+ 371          
+ 372          /*获取指定时间对应的端口状态编码*/
+ 373          uint get_time_code(uint time){
+ 374   1              return 0xff - time;     
+ 375   1      }
+ 376          
+ 377          /*独立键盘扫描*/
+ 378          uchar key_scan(){
+ 379   1              uchar key;
+ 380   1              if((P0 & 0xf0) != 0xf0){
+ 381   2                       delay(1);
+ 382   2                       if((P0 & 0xf0) != 0xf0){
+ 383   3                              key = P0 & 0xf0;
+ 384   3                              while((P0 | 0x0f) != 0xff);
+ 385   3                              return key;
+ 386   3                       }
+ 387   2              }
+ 388   1      
+ 389   1              return 0;
+ 390   1      }
+ 391          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1124    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

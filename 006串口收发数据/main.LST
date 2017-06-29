@@ -1,0 +1,65 @@
+C51 COMPILER V9.01   MAIN                                                                  05/17/2017 09:43:06 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          #define uchar unsigned char
+   4          
+   5          uchar leds,count;
+   6                                                             
+   7          void main(){
+   8   1              leds = 0xfe;
+   9   1      
+  10   1              TMOD = 0x21;
+  11   1              TH1 = 0xfd;
+  12   1              TL1 = 0xfd;
+  13   1              SCON = 0x40;
+  14   1              PCON = 0x00;
+  15   1              TR1 = 1;
+  16   1      
+  17   1              //开启计时定时器，指定时间发一次数据
+  18   1              TH0 = 0x3c;
+  19   1              TL0 = 0xb0;
+  20   1              EA = 1;
+  21   1              ET0 = 1;
+  22   1              TR0 = 1;        
+  23   1              
+  24   1              while(1);
+  25   1      }
+  26          
+  27          //定时器0中断服务子程序
+  28          void timer0_int() interrupt 1{
+  29   1              TH0 = 0x3c;
+  30   1              TL0 = 0xb0;
+  31   1              count++;
+  32   1      
+  33   1              if(count >= 10){
+  34   2                      count = 0;
+  35   2                      P2 = leds;
+  36   2                      SBUF = leds;
+  37   2                      //等待发送完毕
+  38   2                      while(!TI);
+  39   2                      TI = 0;
+  40   2                      leds = _crol_(leds,1);
+  41   2              }
+  42   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     96    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

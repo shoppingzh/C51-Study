@@ -1,0 +1,154 @@
+C51 COMPILER V9.01   MAIN                                                                  06/28/2017 16:46:04 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <stdio.h>
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          
+   6          #define BASIC_POSITION 0x80
+   7          //1602数据端口
+   8          #define DISPLAY_OUT P2
+   9          
+  10          void display_init();
+  11          void write_com(uchar com);
+  12          void write_data(uchar datas);
+  13          void write_data_pos(uint pos,uchar datas);
+  14          void write_string(uchar *str);
+  15          uchar read_data();
+  16          uchar read_data_pos(uint pos);
+  17          uint read_pointer();
+  18          
+  19          
+  20          void delay(uchar time);
+  21          
+  22          //1602
+  23          sbit en = P3^5;
+  24          sbit rs = P3^6;
+  25          sbit rw = P3^7;
+  26          
+  27          
+  28          void main(){
+  29   1      
+  30   1              display_init();
+  31   1              delay(100);
+  32   1              
+  33   1              write_com(BASIC_POSITION);
+  34   1              write_data('n');
+  35   1                      
+  36   1              while(1){}
+  37   1              
+  38   1      }
+  39          
+  40          
+  41          
+  42          /*延时*/
+  43          void delay(uchar time){
+  44   1              uchar x,y;
+  45   1              for(x=0;x<time;x++){
+  46   2                      for(y=0;y<50;y++);
+  47   2              }
+  48   1      }
+  49          
+  50          /*--------------------------------------------------1602--------------------------------------------------
+             -*/
+  51          
+  52          /*写指令*/
+  53          void write_com(uchar com){
+  54   1              rw = 0;
+C51 COMPILER V9.01   MAIN                                                                  06/28/2017 16:46:04 PAGE 2   
+
+  55   1              rs = 0;
+  56   1              DISPLAY_OUT = com;
+  57   1              delay(1);
+  58   1              en = 1;
+  59   1              delay(1);
+  60   1              en = 0;
+  61   1      }
+  62          
+  63          /*写数据*/        
+  64          void write_data(uchar datas){
+  65   1              rw = 0;
+  66   1              rs = 1;
+  67   1              DISPLAY_OUT = datas;
+  68   1              delay(1);
+  69   1              en = 1;
+  70   1              delay(1);
+  71   1              en = 0;
+  72   1      }
+  73          
+  74          /*在指定位置写数据*/
+  75          void write_data_pos(uint pos,uchar datas){
+  76   1              write_com(pos);
+  77   1              write_data(datas);
+  78   1      }
+  79          
+  80          /*写入字符串数据*/
+  81          void write_string(char *str){
+  82   1              while(*str){
+  83   2                      write_data(*str);
+  84   2                      str++;
+  85   2              }
+  86   1      }
+  87          
+  88          /*读取数据（默认读取当前光标处的数据）*/
+  89          uchar read_data(){
+  90   1              uchar c = 0;
+  91   1              DISPLAY_OUT = 0xff;  //为什么?
+  92   1              rw = 1;
+  93   1              rs = 1;
+  94   1              delay(1);
+  95   1              en = 1;
+  96   1              //delay(1);
+  97   1              c = DISPLAY_OUT;
+  98   1              en = 0;
+  99   1              //读取数据后，将光标拉回
+ 100   1              write_com(0x10);
+ 101   1              return c;
+ 102   1      }
+ 103          
+ 104          /*读取指定位置的数据*/
+ 105          uchar read_data_pos(uint pos){
+ 106   1              uchar c;
+ 107   1              uint pointer = read_pointer();
+ 108   1              write_com(pos);
+ 109   1              c = read_data();
+ 110   1              write_com(pointer);
+ 111   1              return c;
+ 112   1      }
+ 113          
+ 114          /*读取当前指针的位置*/
+ 115          uint read_pointer(){
+ 116   1              uint read_pointer = 0;
+C51 COMPILER V9.01   MAIN                                                                  06/28/2017 16:46:04 PAGE 3   
+
+ 117   1              DISPLAY_OUT = 0xff; 
+ 118   1              rw = 1;
+ 119   1              rs = 0;
+ 120   1              delay(5);
+ 121   1              en = 1;
+ 122   1              delay(5);
+ 123   1              read_pointer = DISPLAY_OUT;
+ 124   1              en = 0;
+ 125   1              return read_pointer+BASIC_POSITION;     
+ 126   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    178    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

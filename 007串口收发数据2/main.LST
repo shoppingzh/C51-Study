@@ -1,0 +1,73 @@
+C51 COMPILER V9.01   MAIN                                                                  05/17/2017 10:08:11 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #define uchar unsigned char
+   3          
+   4          //0-9数码管段码表
+   5          uchar code digit_table[ ]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   6          
+   7          //pos:当前显示数字位于段码表中的索引
+   8          uchar count,pos;
+   9          
+  10          void main(){
+  11   1              pos = 0;
+  12   1      
+  13   1              TMOD = 0x21;
+  14   1              TH1 = 0xfd;
+  15   1              TL1 = 0xfd;
+  16   1              SCON = 0x40;
+  17   1              PCON = 0x00;
+  18   1              TR1 = 1;
+  19   1      
+  20   1              EA = 1;
+  21   1              ET0 = 1;
+  22   1              TH0 = 0x3c;
+  23   1              TL0 = 0xb0;
+  24   1              TR0 = 1;
+  25   1      
+  26   1              while(1);
+  27   1              
+  28   1      }
+  29          
+  30          //获取下一个数字
+  31          int next_digit(){
+  32   1              if(pos >= 9){
+  33   2                      pos = -1;
+  34   2              }
+  35   1              return digit_table[++pos];
+  36   1      }
+  37          
+  38          void timer0_int() interrupt 1{
+  39   1              TH0 = 0x3c;
+  40   1              TL0 = 0xb0;
+  41   1              count++;
+  42   1              if(count >= 10){
+  43   2                      count = 0;
+  44   2                      SBUF = next_digit();
+  45   2                      while(!TI);
+  46   2                      TI = 0;
+  47   2              }
+  48   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    111    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   MAIN                                                                  05/17/2017 10:08:11 PAGE 2   
+
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
